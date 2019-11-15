@@ -21,13 +21,13 @@
         <div class="row">
             Set dificulty:
                 <select id="difficulty" class="form-control">
-                    <option value="3">Stupid Easy</option>
-                    <option value="5">Easy</option>
-                    <option value="10">Sorta Easy</option>
-                    <option value="20">Medium</option>
-                    <option value="30">Kinda Hard</option>
-                    <option value="40">Pretty Hard</option>
-                    <option value="52">Insanity</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="52">52</option>
 
                 </select>
                 <button class="btn btn-primary" onclick="startGame()">Start</button>
@@ -60,15 +60,14 @@
         'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', '10H', 'JH', 'QH', 'KH',
         'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '10S', 'JS', 'QS', 'KS'];
         
-        //TODO: implement shuffle method
         var deck1 = [];
         var deck2 = [];
         var deck1Div = document.getElementById('deck1');
         var deck2Div = document.getElementById('deck2');
+        var element = document.getElementById('difficulty');
+        var difficulty = element.options[element.selectedIndex].value;
 
         function startGame() {
-            var element = document.getElementById('difficulty');
-            var difficulty = element.options[element.selectedIndex].value;
             console.log('Difficulty: ' + difficulty);
             deck = shuffle(deck);
             resetGame();
@@ -92,6 +91,42 @@
             deck1Div.innerHTML = '';
             deck2Div.innerHTML = '';
         }
+
+        function drawDeck1() {
+            deck1Div.innerHTML = '';
+
+            for(i = 0; i < difficulty; i++) {
+                card1 = '<div class="col-4 mb-2"> <img data-card="'+deck1[i]+'" src="./img/blue_back.png" style="width: 100%;"> </div>';
+                
+                deck1Div.innerHTML += card1;
+            }
+        }
+
+        //Event Listeners
+
+        document.getElementById("deck1").addEventListener('click', function(event) {
+            // Checks to see if item clicked in a card
+            if (event.target.getAttribute('data-card') == undefined) {
+                return;
+            }
+
+            // If card is already flipped
+            drawDeck1(); //BORKED
+
+            // Flip card
+            console.log(event.target.getAttribute('data-card'));
+            console.log(event.target.src);
+            event.target.src = './img/' + event.target.getAttribute('data-card') + '.png';
+        });
+
+        document.getElementById("deck2").addEventListener('click', function(event) {
+            if (event.target.getAttribute('data-card') == undefined) {
+                return;
+            }
+            console.log(event.target.getAttribute('data-card'));
+            console.log(event.target.src);
+            event.target.src = './img/' + event.target.getAttribute('data-card') + '.png';
+        });
     </script>
 </body>
 
