@@ -1,133 +1,162 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- Font Awesome Icons -->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <!-- Other CSS -->
-    <link rel="stylesheet" href="./CSS/style.css">
 
     <title>Hello, world!</title>
-</head>
-
-<body>
-    <div class="container">
-        <div class="row">
-            Set dificulty:
-                <select id="difficulty" class="form-control">
-                    <option value="3">3</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                    <option value="52">52</option>
-
-                </select>
-                <button class="btn btn-primary" onclick="startGame()">Start</button>
-                <button class="btn btn-danger" onclick="resetGame()">Reset</button>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <h1>Deck 1</h1>
-                <div class="row" id="deck1">
-                </div>
-            </div>
-            <div class="col-6">
-                <h1>Deck 2</h1>
-                <div class="row" id="deck2"></div>
-            </div>
-        </div>
-        
-
-    </div>
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			Set difficulty:
+			<select id="difficulty" class="form-control">
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="10">10</option>
+				<option value="20">20</option>
+				<option value="40">40</option>
+			</select>
+			<button class="btn btn-primary" onclick="startGame()">Start game</button>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<h1>Deck 1</h1>
+				<div class="row" id="deck1"></div>
+			</div>
+			<div class="col-6">
+				<h1>Deck 2</h1>
+				<div class="row" id="deck2">
+				</div>
+			</div>
+		</div>
+	</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="./JS/shuffle.js"></script>
-    <script>
-        var deck = [
-        'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', '10C', 'JC', 'QC', 'KC',
-        'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', '10D', 'JD', 'QD', 'KD',
-        'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', '10H', 'JH', 'QH', 'KH',
-        'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '10S', 'JS', 'QS', 'KS'];
-        
-        var deck1 = [];
-        var deck2 = [];
-        var deck1Div = document.getElementById('deck1');
-        var deck2Div = document.getElementById('deck2');
-        var element = document.getElementById('difficulty');
-        var difficulty = element.options[element.selectedIndex].value;
+	<script src="./JS/shuffle.js"></script>
+	<script>
+	//Main deck (52 cards)
+	var deck=[
+	'AC','2C','3C','4C','5C','6C','7C','8C','9C','10C','JC','QC','KC',
+	'AD','2D','3D','4D','5D','6D','7D','8D','9D','10D','JD','QD','KD',
+	'AH','2H','3H','4H','5H','6H','7H','8H','9H','10H','JH','QH','KH',
+	'AS','2S','3S','4S','5S','6S','7S','8S','9S','10S','JS','QS','KS'];
+	//Two decks for each side of game
+	var deck1=[];
+	var deck2=[];
+	//Contains the matched sets of cards
+	var deck1matched=[];
+	var deck2matched=[]; // TODO: delete <--
+	//Contains the value of each card selected
+	var deck1flipped='';
+	var deck2flipped='';
 
-        function startGame() {
-            console.log('Difficulty: ' + difficulty);
-            deck = shuffle(deck);
-            resetGame();
-
-            for(i = 0; i < difficulty; i++) {
-                deck1.push(deck[i]);
-                deck2.push(deck[i]);
-            }
-            shuffle(deck2); 
-
-            for(i = 0; i < difficulty; i++) {
-                card1 = '<div class="col-4 mb-2"> <img data-card="'+deck1[i]+'" src="./img/blue_back.png" style="width: 100%;"> </div>';
-                card2 = '<div class="col-4 mb-2"> <img data-card="'+deck2[i]+'" src="./img/red_back.png" style="width: 100%;"> </div>';
-                
-                deck1Div.innerHTML += card1;
-                deck2Div.innerHTML += card2;
-            }
-        }
-
-        function resetGame() {
-            deck1Div.innerHTML = '';
-            deck2Div.innerHTML = '';
-        }
-
-        function drawDeck1() {
-            deck1Div.innerHTML = '';
-
-            for(i = 0; i < difficulty; i++) {
-                card1 = '<div class="col-4 mb-2"> <img data-card="'+deck1[i]+'" src="./img/blue_back.png" style="width: 100%;"> </div>';
-                
-                deck1Div.innerHTML += card1;
-            }
-        }
-
-        //Event Listeners
-
-        document.getElementById("deck1").addEventListener('click', function(event) {
-            // Checks to see if item clicked in a card
-            if (event.target.getAttribute('data-card') == undefined) {
-                return;
-            }
-
-            // If card is already flipped
-            drawDeck1(); //BORKED
-
-            // Flip card
-            console.log(event.target.getAttribute('data-card'));
-            console.log(event.target.src);
-            event.target.src = './img/' + event.target.getAttribute('data-card') + '.png';
-        });
-
-        document.getElementById("deck2").addEventListener('click', function(event) {
-            if (event.target.getAttribute('data-card') == undefined) {
-                return;
-            }
-            console.log(event.target.getAttribute('data-card'));
-            console.log(event.target.src);
-            event.target.src = './img/' + event.target.getAttribute('data-card') + '.png';
-        });
-    </script>
-</body>
-
+	//Initialize a new game... resets variables 
+	function startGame(){
+		//Get the difficulty selected by user
+		var element=document.getElementById('difficulty');
+		var value=element.options[element.selectedIndex].value;
+		//Clears deck areas
+		var deck1div=document.getElementById('deck1');
+		var deck2div=document.getElementById('deck2');
+		deck1div.innerHTML='';
+		deck2div.innerHTML='';
+		//Logs difficulty
+		console.log(value);
+		
+		//Clears out all values
+		var deck1=[];
+		var deck2=[];
+		var deck1matched=[];
+		var deck2matched=[];
+		var deck1flipped='';
+		var deck2flipped='';
+		//Shuffle the main desk, then build the 2 decks used in the game
+		deck=shuffle(deck);
+		for(i=0;i<value;i++){
+			deck1.push(deck[i]);
+			deck2.push(deck[i]);
+		}
+		//Shuffling the 2nd deck so it isnt the same as first
+		shuffle(deck2);
+		
+		for(i=0;i<value;i++){
+			card1='<div class="col-4 mb-2"><img class="card" data-card="' +deck1[i] +'" src="img/red_back.png" style="width:100%" /></div>';
+			card2='<div class="col-4 mb-2"><img class="card" data-card="' +deck2[i] +'" src="img/yellow_back.png" style="width:100%" /></div>';
+			deck1div.innerHTML+=card1;
+			deck2div.innerHTML+=card2;
+		}
+	}
+	
+	//Event listener for deck 1
+	document.getElementById("deck1").addEventListener('click',function(event){
+		//Checks if user clicks on something other than a card
+		if(event.target.getAttribute('data-card')==undefined) return;
+		deck1flipped=event.target.getAttribute('data-card');
+		console.log("deck1flipped - "+deck1flipped);
+		console.log("deck2flipped - "+deck2flipped);
+		//Flip selected card
+		flipDeck('deck1',event.target.getAttribute('data-card'),'red_back');
+		//Checks if flipped card matches currently flipped card on other deck
+		if(deck2flipped.length>0 && deck1flipped.length>0){
+			if(deck2flipped==deck1flipped){
+				deck1matched.push(event.target.getAttribute('data-card'));
+				deck2matched.push(event.target.getAttribute('data-card'));
+			}else{
+				deck1flipped='';
+				deck2flipped='';
+			}
+		}
+		
+		console.log(event.target.getAttribute('data-card'));
+		event.target.src='img/'+event.target.getAttribute('data-card')+'.png';
+	});
+	
+	//Event listener for deck 2
+	document.getElementById("deck2").addEventListener('click',function(event){
+		//Checks if user clicks on something other than a card
+		if(event.target.getAttribute('data-card')==undefined) return;
+		deck2flipped=event.target.getAttribute('data-card');
+		console.log("deck1flipped - "+deck1flipped);
+		console.log("deck2flipped - "+deck2flipped);
+		if(deck2flipped.length>0 && deck1flipped.length>0){
+			if(deck2flipped==deck1flipped){
+				deck1matched.push(event.target.getAttribute('data-card'));
+				deck2matched.push(event.target.getAttribute('data-card'));
+			}else{
+				deck1flipped='';
+				deck2flipped='';
+			}
+		}
+		flipDeck('deck2',event.target.getAttribute('data-card'),'yellow_back');
+		console.log(event.target.getAttribute('data-card'));
+		event.target.src='img/'+event.target.getAttribute('data-card')+'.png';
+	});
+	
+	//Flips the image of the card that the user clicks
+	function flipDeck(deck, selectedCard='',back=''){
+		var deck=document.getElementById(deck);
+		var cards = deck.getElementsByClassName('card');
+		var currentCard;
+		for(i=0;i<cards.length;i++){
+			currentCard=cards[i].getAttribute('data-card');
+			if(deck=='deck1'){
+				if(currentCard!=selectedCard && !deck1matched.includes(currentCard)) cards[i].src='img/'+back+'.png';
+			}else{
+				if(currentCard!=selectedCard && !deck2matched.includes(currentCard)) cards[i].src='img/'+back+'.png';
+			}
+		}
+	}
+	</script>
+  </body>
 </html>
