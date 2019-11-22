@@ -55,8 +55,8 @@
 	var deck1=[];
 	var deck2=[];
 	/* The arrays that contain the cards that have been matched so far */
-	var deck1matched=[];
-	var deck2matched=[]; // TODO: delete one of the 2 arrays
+	var deckMatched=[];
+
 	/* Variables that contain the value of the card picked from each deck /*/
 	var deck1flipped='';
 	var deck2flipped='';
@@ -105,8 +105,8 @@
 		deck1=[];
 		deck2=[];
 		/* Clear the cards that have been matched */
-		deck1matched=[];
-		deck2matched=[];	// TODO: delete one of the two deckmatched arrays
+		deckMatched=[];
+
 		/* Clear the variables that contain the cards that have been flipped */
 		deck1flipped='';
 		deck2flipped='';
@@ -117,7 +117,7 @@
 		/* If the user clicks outside a card, don't do anything */
 		if(event.target.getAttribute('data-card')==undefined) return;
 		/* Check if the card has already been matched */
-		if(deck1matched.includes(event.target.getAttribute('data-card'))) return;
+		if(deckMatched.includes(event.target.getAttribute('data-card'))) return;
 		/* get the value of the card and set it as flipped */
 		deck1flipped=event.target.getAttribute('data-card');
 		console.log("deck1flipped - "+deck1flipped);
@@ -130,9 +130,9 @@
 			if(deck2flipped==deck1flipped){
 				/* We have a match*/
 				/* Add the cards to the matched array */
-				deck1matched.push(event.target.getAttribute('data-card'));
-				deck2matched.push(event.target.getAttribute('data-card'));  // TODO: delete one of the two
-				console.log(deck1matched);
+				deckMatched.push(event.target.getAttribute('data-card'));
+				(event.target.getAttribute('data-card'));  // TODO: delete one of the two
+				console.log(deckMatched);
 				/* Clear the flipped cards */
 				deck1flipped='';
 				deck2flipped='';
@@ -160,7 +160,7 @@
 		/* If the user clicks outside a card, don't do anything */
 		if(event.target.getAttribute('data-card')==undefined) return;
 		/* Check if the card has already been matched */
-		if(deck1matched.includes(event.target.getAttribute('data-card'))) return;
+		if(deckMatched.includes(event.target.getAttribute('data-card'))) return;
 		/* get the value of the card and set it as flipped */
 		deck2flipped=event.target.getAttribute('data-card');
 		console.log("deck1flipped - "+deck1flipped);
@@ -173,9 +173,9 @@
 			if(deck2flipped==deck1flipped){
 				/* We have a match*/
 				/* Add the cards to the matched array */
-				deck1matched.push(event.target.getAttribute('data-card'));
-				deck2matched.push(event.target.getAttribute('data-card'));  // TODO: delete one of the two
-				console.log(deck1matched);
+				deckMatched.push(event.target.getAttribute('data-card'));
+				(event.target.getAttribute('data-card'));  // TODO: delete one of the two
+				console.log(deckMatched);
 				/* Clear the flipped cards */
 				deck1flipped='';
 				deck2flipped='';
@@ -204,9 +204,9 @@
 		for(i=0;i<cards.length;i++){
 			currentCard=cards[i].getAttribute('data-card');
 			if(deck=='deck1'){
-				if(currentCard!=selectedCard && !deck1matched.includes(currentCard)) cards[i].src='img/'+back+'.png';
+				if(currentCard!=selectedCard && !deckMatched.includes(currentCard)) cards[i].src='img/'+back+'.png';
 			}else{
-				if(currentCard!=selectedCard && !deck2matched.includes(currentCard)) cards[i].src='img/'+back+'.png';
+				if(currentCard!=selectedCard && !deckMatched.includes(currentCard)) cards[i].src='img/'+back+'.png';
 			}
 		}
 	}
@@ -223,16 +223,16 @@
 			currentCard=cards[i].getAttribute('data-card');
 			/* Check if the card has been matched so that we dont flip it */
 			if(deck=='deck1'){
-				if(!deck1matched.includes(currentCard)) cards[i].src='img/'+back+'.png';
+				if(!deckMatched.includes(currentCard)) cards[i].src='img/'+back+'.png';
 			}else{
-				if(!deck2matched.includes(currentCard)) cards[i].src='img/'+back+'.png';
+				if(!deckMatched.includes(currentCard)) cards[i].src='img/'+back+'.png';
 			}
 		}
 	}
-
+	
 	function checkIfEndGame() {
 		setTimeout(function() {
-			if (deck1.length == deck1matched.length) {
+			if (deck1.length == deckMatched.length) {
 				alert('Congratulations! You won!');
 			}
 		}, 2000 );
